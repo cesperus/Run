@@ -4,6 +4,7 @@ import os
 from helpers import *
 from runner import *
 from turret import *
+import math
 
 # initialize pygame
 pygame.init()
@@ -25,6 +26,10 @@ player_placeholder = pygame.Rect(player_loc)
 player = pygame.image.load(os.path.join('assets', 'images', 'players and turret stuff', 'tile_0110.png'))
 turret = pygame.image.load(os.path.join('assets', 'images', 'players and turret stuff', 'weapon_bow_arrow.png'))
 
+# initialize empty bullet list
+bullets = []
+BULLET_SIZE = (5,5)
+
 # make a clock
 clock = pygame.time.Clock()
 FPS = 60
@@ -32,6 +37,18 @@ FPS = 60
 # set player speed
 player_speed = 2.5
 player_x, player_y = player_placeholder.x, player_placeholder.y
+
+# bullet class, eventually cap # of bullets at 4 at one time, and maybe add rocket with right click
+class Bullet:
+    def __init__(self, x, y, angle):
+        self.rect = pygame.Rect(x, y, *BULLET_SIZE)
+        self.speed = 5
+        self.angle = angle
+
+    def update(self):
+        self.rect.x += self.speed * math.cos(self.angle)
+        self.rect.y += self.speed * math.sin(self.angle)
+
 
 run = True
 while run:
@@ -43,6 +60,27 @@ while run:
 
     # draw player placeholder
     pygame.draw.rect(screen, (0, 200, 0), player_placeholder)
+
+    for bullet in bullets:
+        pygame.draw.rect(screen, (0, 0, 240), bullet.rect)
+        bullet.update()
+
+        # Remove bullets that go off-screen
+        if not (0 <= bullet.rect.x <= WIDTH and 0 <= bullet.rect.y <= HEIGHT):
+            bullets.remove(bullet)
+
+    keys_pressed = pygame.key.get_pressed()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Get the angle between turret and mouse
+            # note: used ChatGPT to get the following 3 lines of code
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            angle = math.atan2(mouse_y - turret_placehold.centery, mouse_x - turret_placehold.centerx)
+            # Spawn a bullet at the turret's position
+            bullet = Bullet(turret_placehold.centerx, turret_placehold.centery, angle)
+            bullets.append(bullet)
 
     # add some key actions to move a player + make the stop when they hit the x or y boundaries
     keys_pressed = pygame.key.get_pressed()
@@ -63,28 +101,16 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-
-
     # show the most recent things drawn
     pygame.display.update()
 
     #control the frame rate
     clock.tick(FPS)
 
-
-
-
-
-# set the resolution of our game window
-
-
-# Make my background once!
+# Make my background once
 background = make_background(screen)
 
-
-
-
-# make map
+# make a map eventually
 
 # would be cool to add foxholes, will definitely add walls and stuff to hide behind
 
