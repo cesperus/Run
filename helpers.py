@@ -1,7 +1,7 @@
 import pygame
 from random import randint
 
-# this function will take 2 surface and center the 2nd surface on the first one
+# this function will take 2 surfaces and center the 2nd surface on the first one
 def center_surfaces(bg, fg):
     # get the bg width and height
     bg_width = bg.get_width()
