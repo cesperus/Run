@@ -28,7 +28,10 @@ turret = pygame.image.load(os.path.join('assets', 'images', 'players and turret 
 
 # initialize empty bullet list
 bullets = []
+dead_bullets = []
 BULLET_SIZE = (5,5)
+MAX_BULLETS = 8
+BULLET_COUNTDOWN = .2
 
 # make a clock
 clock = pygame.time.Clock()
@@ -42,45 +45,65 @@ player_x, player_y = player_placeholder.x, player_placeholder.y
 class Bullet:
     def __init__(self, x, y, angle):
         self.rect = pygame.Rect(x, y, *BULLET_SIZE)
-        self.speed = 5
+        self.speed = 3
         self.angle = angle
 
     def update(self):
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y += self.speed * math.sin(self.angle)
 
-
+cooldown_timer = 0
 run = True
 while run:
     # fill in color for background
     screen.fill((0, 255, 0))
 
-    # gives the placeholder turret a color value, and draws it on the screen
-    pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
-
-    # draw player placeholder
-    pygame.draw.rect(screen, (0, 200, 0), player_placeholder)
-
-    for bullet in bullets:
-        pygame.draw.rect(screen, (0, 0, 240), bullet.rect)
-        bullet.update()
-
-        # Remove bullets that go off-screen
-        if not (0 <= bullet.rect.x <= WIDTH and 0 <= bullet.rect.y <= HEIGHT):
-            bullets.remove(bullet)
-
-    keys_pressed = pygame.key.get_pressed()
+    # shooting from turret event
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # Get the angle between turret and mouse
-            # note: used ChatGPT to get the following 3 lines of code
+            # note: used ChatGPT to get the following 2 lines of code
             mouse_x, mouse_y = pygame.mouse.get_pos()
             angle = math.atan2(mouse_y - turret_placehold.centery, mouse_x - turret_placehold.centerx)
-            # Spawn a bullet at the turret's position
-            bullet = Bullet(turret_placehold.centerx, turret_placehold.centery, angle)
-            bullets.append(bullet)
+            # Check if the number of bullets is less than the limit
+            if len(bullets) < MAX_BULLETS:
+                # If there are inactive bullets, reuse one
+                if dead_bullets:
+                    bullet = dead_bullets.pop()
+                    bullet.rect.x = turret_placehold.centerx
+                    bullet.rect.y = turret_placehold.centery
+                    bullet.angle = angle
+                else:
+                    # Otherwise, create a new bullet
+                    bullet = Bullet(turret_placehold.centerx, turret_placehold.centery, angle)
+
+                # Add the bullet to the active list
+                bullets.append(bullet)
+                # cooldown
+                cooldown_timer = BULLET_COUNTDOWN
+
+    # Update cooldown timer
+    if cooldown_timer > 0:
+        cooldown_timer -= 1 / FPS  # Decrement the timer
+
+        # Update and draw active bullets
+    for bullet in bullets:
+        pygame.draw.rect(screen, (0, 0, 240), bullet.rect)
+        bullet.update()
+
+        # Check if the bullet is off-screen
+        if not (0 <= bullet.rect.x <= WIDTH and 0 <= bullet.rect.y <= HEIGHT):
+            # Move the bullet to the inactive list
+            bullets.remove(bullet)
+            dead_bullets.append(bullet)
+
+    # Draw the placeholder turret
+    pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
+
+    # Draw the player placeholder
+    pygame.draw.rect(screen, (0, 200, 0), player_placeholder)
 
     # add some key actions to move a player + make the stop when they hit the x or y boundaries
     keys_pressed = pygame.key.get_pressed()
