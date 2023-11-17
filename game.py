@@ -53,11 +53,16 @@ class Bullet:
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y += self.speed * math.sin(self.angle)
 
+# make a turret instance
+my_turret = Turret(screen)
+turret_group = pygame.sprite.Group()
+turret_group.add(my_turret)
+
 cooldown_timer = 0
 run = True
 while run:
     # fill in color for background
-    screen.fill((0, 255, 0))
+    screen.fill((58, 100, 189))
 
     # shooting from turret event
     for event in pygame.event.get():
@@ -91,7 +96,7 @@ while run:
 
     # Update and draw active bullets
     for bullet in bullets:
-        pygame.draw.rect(screen, (0, 0, 240), bullet.rect)
+        pygame.draw.rect(screen, (0, 0, 0), bullet.rect)
         bullet.update()
 
         # Check if the bullet hits the player
@@ -110,6 +115,9 @@ while run:
 
     # Draw the placeholder turret
     pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
+
+    # Draw the real turret on top
+    turret_group.draw(screen)
 
     # Draw the player placeholder
     pygame.draw.rect(screen, player_color, player_placeholder)
