@@ -4,7 +4,7 @@ import pygame
 
 
 
-# bullet class
+# bullet class, eventually cap # of bullets at 4 at one time, and maybe add rocket with right click
 class Bullet:
     def __init__(self, x, y):
         self.rect = pygame.Rect(x, y, 10, 5)

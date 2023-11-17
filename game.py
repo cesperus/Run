@@ -44,7 +44,7 @@ while run:
     # draw player placeholder
     pygame.draw.rect(screen, (0, 200, 0), player_placeholder)
 
-    # add some key actions to move a player + make the stop when they hit an x or y bound
+    # add some key actions to move a player + make the stop when they hit the x or y boundaries
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[pygame.K_a] and player_x - player_speed > 0:
         player_x -= player_speed
