@@ -1,5 +1,9 @@
 import pygame
 from random import randint
+from game import *
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
 
 # this function will take 2 surfaces and center the 2nd surface on the first one
 def center_surfaces(bg, fg):
@@ -35,3 +39,9 @@ def make_background(screen):
         background.blit(plant_tile,
                         (randint(0, WIDTH),randint(HEIGHT-3*tile_height, HEIGHT-1*tile_height)))
     return background
+
+def draw_window():
+    screen.fill((255,255,255))
+    screen.blit(turret, ())
+    screen.blit(player, ())
+    pygame.display.update()
