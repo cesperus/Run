@@ -31,7 +31,7 @@ bullets = []
 dead_bullets = []
 BULLET_SIZE = (5,5)
 MAX_BULLETS = 8
-BULLET_COUNTDOWN = .2
+BULLET_COUNTDOWN = .1
 
 # make a clock
 clock = pygame.time.Clock()
@@ -39,6 +39,7 @@ FPS = 60
 
 # set player speed
 player_speed = 2.5
+player_color = (0, 200, 0)
 player_x, player_y = player_placeholder.x, player_placeholder.y
 
 # bullet class, eventually cap # of bullets at 4 at one time, and maybe add rocket with right click
@@ -88,11 +89,19 @@ while run:
     if cooldown_timer > 0:
         cooldown_timer -= 1 / FPS  # Decrement the timer
 
-        # Update and draw active bullets
+    # Update and draw active bullets
     for bullet in bullets:
         pygame.draw.rect(screen, (0, 0, 240), bullet.rect)
         bullet.update()
 
+        # Check if the bullet hits the player
+        if bullet.rect.colliderect(player_placeholder):
+            player_color = (255, 0, 0)  # Change player color to red
+            # You might want to handle additional logic here, such as reducing player health
+
+            # Move the bullet to the inactive list
+            bullets.remove(bullet)
+            dead_bullets.append(bullet)
         # Check if the bullet is off-screen
         if not (0 <= bullet.rect.x <= WIDTH and 0 <= bullet.rect.y <= HEIGHT):
             # Move the bullet to the inactive list
@@ -103,7 +112,7 @@ while run:
     pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
 
     # Draw the player placeholder
-    pygame.draw.rect(screen, (0, 200, 0), player_placeholder)
+    pygame.draw.rect(screen, player_color, player_placeholder)
 
     # add some key actions to move a player + make the stop when they hit the x or y boundaries
     keys_pressed = pygame.key.get_pressed()
@@ -132,7 +141,6 @@ while run:
 
 # Make my background once
 background = make_background(screen)
-
 # make a map eventually
 
 # would be cool to add foxholes, will definitely add walls and stuff to hide behind
