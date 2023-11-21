@@ -20,7 +20,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 turret_loc = (1040, (640/2)-(40/2), 40, 40)
 turret_placehold = pygame.Rect(turret_loc)
 player_loc = (50, (640/2)-(60/2), 50, 60)
-player_placeholder = pygame.Rect(player_loc)
+player_rect = pygame.Rect(player_loc)
 
 # import assets for interactable objects
 player = pygame.image.load(os.path.join('assets', 'images', 'players and turret stuff', 'tile_0110.png'))
@@ -29,7 +29,6 @@ turret = pygame.image.load(os.path.join('assets', 'images', 'players and turret 
 # initialize empty bullet list
 bullets = []
 dead_bullets = []
-BULLET_SIZE = (5,5)
 MAX_BULLETS = 8
 BULLET_COUNTDOWN = .1
 
@@ -40,18 +39,9 @@ FPS = 60
 # set player speed
 player_speed = 2.5
 player_color = (0, 200, 0)
-player_x, player_y = player_placeholder.x, player_placeholder.y
+player_x, player_y = player_rect.x, player_rect.y
 
-# bullet class, eventually cap # of bullets at 4 at one time, and maybe add rocket with right click
-class Bullet:
-    def __init__(self, x, y, angle):
-        self.rect = pygame.Rect(x, y, *BULLET_SIZE)
-        self.speed = 3
-        self.angle = angle
 
-    def update(self):
-        self.rect.x += self.speed * math.cos(self.angle)
-        self.rect.y += self.speed * math.sin(self.angle)
 
 # make a turret instance
 my_turret = Turret(screen)
@@ -100,7 +90,7 @@ while run:
         bullet.update()
 
         # Check if the bullet hits the player
-        if bullet.rect.colliderect(player_placeholder):
+        if bullet.rect.colliderect(player_rect):
             player_color = (255, 0, 0)  # Change player color to red
             # You might want to handle additional logic here, such as reducing player health
 
@@ -116,25 +106,27 @@ while run:
     # Draw the placeholder turret
     pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
 
+    screen.blit(player, player_rect)
+
     # Draw the real turret on top
     turret_group.draw(screen)
 
     # Draw the player placeholder
-    pygame.draw.rect(screen, player_color, player_placeholder)
+    pygame.draw.rect(screen, player_color, player_rect)
 
     # add some key actions to move a player + make the stop when they hit the x or y boundaries
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[pygame.K_a] and player_x - player_speed > 0:
         player_x -= player_speed
-    elif keys_pressed[pygame.K_d] and player_x + player_speed < WIDTH - player_placeholder.width:
+    elif keys_pressed[pygame.K_d] and player_x + player_speed < WIDTH - player_rect.width:
         player_x += player_speed
     elif keys_pressed[pygame.K_w] and player_y - player_speed > 0:
         player_y -= player_speed
-    elif keys_pressed[pygame.K_s] and player_y + player_speed < HEIGHT - player_placeholder.height:
+    elif keys_pressed[pygame.K_s] and player_y + player_speed < HEIGHT - player_rect.height:
         player_y += player_speed
 
     # Update player position as integers
-    player_placeholder.x, player_placeholder.y = int(player_x), int(player_y)
+    player_rect.x, player_rect.y = int(player_x), int(player_y)
 
     # general ender
     for event in pygame.event.get():

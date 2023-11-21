@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 class Turret(pygame.sprite.Sprite):
     def __init__(self,screen):
@@ -16,3 +17,14 @@ class Turret(pygame.sprite.Sprite):
         None
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+# bullet class, capped at 8 bullets at one time, and maybe add rocket with right click
+class Bullet:
+    def __init__(self, x, y, angle):
+        self.rect = pygame.Rect(x, y, 5, 5)
+        self.speed = 3
+        self.angle = angle
+
+    def update(self):
+        self.rect.x += self.speed * math.cos(self.angle)
+        self.rect.y += self.speed * math.sin(self.angle)
