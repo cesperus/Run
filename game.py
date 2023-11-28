@@ -1,4 +1,3 @@
-# Example file showing a basic pygame "game loop"
 import pygame
 import os
 from helpers import *
@@ -10,9 +9,16 @@ import math
 pygame.init()
 
 # set screen size
-WIDTH = 1080
-HEIGHT = 640
+WIDTH = 720 * (3/2)
+HEIGHT = 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# make background
+
+background = make_background(screen)
+
+
+
 
 # just adding in a rectangle to hold the place of where I want my turret eventually, on the far right side, in the middle.
 # Maybe I will make it so that this can move later
@@ -29,8 +35,6 @@ turret = pygame.image.load(os.path.join('assets', 'images', 'players and turret 
 # initialize empty bullet list
 bullets = []
 dead_bullets = []
-MAX_BULLETS = 8
-BULLET_COUNTDOWN = .1
 
 # make a clock
 clock = pygame.time.Clock()
@@ -41,7 +45,10 @@ player_speed = 2.5
 player_color = (0, 200, 0)
 player_x, player_y = player_rect.x, player_rect.y
 
-
+# make a bullet instance
+my_bullet = Bullet(screen)
+bullet_group = pygame.sprite.Group()
+bullet_group.add(my_bullet)
 
 # make a turret instance
 my_turret = Turret(screen)
@@ -51,8 +58,8 @@ turret_group.add(my_turret)
 cooldown_timer = 0
 run = True
 while run:
-    # fill in color for background
-    screen.fill((58, 100, 189))
+    # draw the background on the screen
+    screen.blit(background, (0, 0))
 
     # shooting from turret event
     for event in pygame.event.get():
@@ -65,11 +72,10 @@ while run:
             angle = math.atan2(mouse_y - turret_placehold.centery, mouse_x - turret_placehold.centerx)
             # Check if the number of bullets is less than the limit
             if len(bullets) < MAX_BULLETS:
+                bullet_group.add(Bullet(my_turret.rect.midleft))
                 # If there are inactive bullets, reuse one
                 if dead_bullets:
                     bullet = dead_bullets.pop()
-                    bullet.rect.x = turret_placehold.centerx
-                    bullet.rect.y = turret_placehold.centery
                     bullet.angle = angle
                 else:
                     # Otherwise, create a new bullet
@@ -102,11 +108,6 @@ while run:
             # Move the bullet to the inactive list
             bullets.remove(bullet)
             dead_bullets.append(bullet)
-
-    # Draw the placeholder turret
-    pygame.draw.rect(screen, (200, 0, 0), turret_placehold)
-
-    screen.blit(player, player_rect)
 
     # Draw the real turret on top
     turret_group.draw(screen)
