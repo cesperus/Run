@@ -12,33 +12,49 @@ def center_surfaces(bg, fg):
     bg.blit(fg, (bg_width / 2 - fg_width / 2, bg_height / 2 - fg_height / 2))
 
 
-WIDTH = 720 * (3 / 2)
-HEIGHT = 720
+WIDTH = 1088
+HEIGHT = 704
 
 
 def make_background(screen):
     WIDTH = screen.get_width()
     HEIGHT = screen.get_height()
-    plaintile = pygame.image.load('assets/images/groundtextures/plain_ground.png')
-    plain_dirtupper = pygame.image.load('assets/images/groundtextures/plainupper.png')
-    plain_dirtupperright = pygame.image.load('assets/images/groundtextures/plaincornerUR.png')
-    bigrocks = pygame.image.load('assets/images/groundtextures/bigrocks.png')
-    pebbles = pygame.image.load('assets/images/groundtextures/rocky.png')
-    rocky_dirtupper = pygame.image.load('assets/images/groundtextures/rockyupper.png')
 
-    # get tile size info
-    tile_width = plaintile.get_width()
-    tile_height = plaintile.get_height()
     # make a background
-    background = pygame.Surface((WIDTH, HEIGHT))
-    # draw ground tiles
-    for x in range(0, WIDTH, tile_width):
-        for y in range(0, HEIGHT, tile_height):
-            background.blit(plaintile, (x, y))
-    # draw sand tile
-    for x in range(0, WIDTH, tile_width):
-        background.blit(bigrocks, (x, HEIGHT - tile_height))
-    # draw sand top tile
-    for x in range(0, WIDTH, tile_width):
-        background.blit(plain_dirtupper, (x, HEIGHT - 2 * tile_height))
+    background = [
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+            [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4],
+    ]
+
+    for y in range(0,11):
+        for x in range(0,17):
+            tile = background[y][x]
+            tile_type = tile_repo(tile)
+            tile_type = pygame.transform.scale(tile_type, (64,64))
+            background.blit(tile_type, (x*64, y*64))
+
+
     return background
+
+def tile_repo(tile_num):
+    if tile_num == 0:
+        return pygame.image.load('assets/images/groundtextures/plain_ground.png')
+    if tile_num == 1:
+        return pygame.image.load('assets/images/groundtextures/plainupper.png')
+    if tile_num == 2:
+        return pygame.image.load('assets/images/groundtextures/plaincornerUR.png')
+    if tile_num == 3:
+        return pygame.image.load('assets/images/groundtextures/bigrocks.png')
+    if tile_num == 4:
+        return pygame.image.load('assets/images/groundtextures/rocky.png')
+    if tile_num == 5:
+        return pygame.image.load('assets/images/groundtextures/rockyupper.png')

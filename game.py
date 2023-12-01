@@ -9,7 +9,7 @@ import math
 pygame.init()
 
 # set screen size
-WIDTH = 720 * (3/2)
+WIDTH = 1080
 HEIGHT = 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 

@@ -10,11 +10,13 @@ class Turret(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(pygame.image.load('assets/images/players and turret stuff/weapon_bow_arrow.png'),90)
         self.image = pygame.transform.scale_by(self.image, .6)
         self.rect = self.image.get_rect()
-        self.rect.x = 1040
-        self.rect.y = (640/2)-(40/2)
+        self.rect.center = (1080, 360)
+        self.scroll_direction = 0  # 1 for scrolling up, -1 for scrolling down
 
     def update(self):
-        None
+        self.rect.y += self.scroll_direction * 5  # Adjust the speed as needed
+        self.rect.y = max(0, min(self.rect.y, 350))  # Keep the object within the screen bounds
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
@@ -35,3 +37,17 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y += self.speed * math.sin(self.angle)
+
+
+
+
+wordbank: #this is the scroll-wheel stuff for the turret
+
+elif event.type == pygame.MOUSEBUTTONDOWN:
+if event.button == 4:  # Scroll wheel up
+    self.object.scroll_direction = -1
+elif event.button == 5:  # Scroll wheel down
+    self.object.scroll_direction = 1
+elif event.type == pygame.MOUSEBUTTONUP:
+    if event.button in [4, 5]:
+        self.object.scroll_direction = 0
