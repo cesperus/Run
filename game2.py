@@ -18,6 +18,8 @@ scurry_sound.set_volume(.4)
 tank_sound = pygame.mixer.Sound('assets/audios/tank.wav')
 tank_sound.set_volume(.4)
 dead = pygame.mixer.Sound('assets/audios/death.mp3')
+background_music = pygame.mixer.Sound('assets/audios/background.mp3')
+background_music.set_volume(.2)
 
 
 # set screen size
@@ -91,7 +93,7 @@ while run:
         if keys[pygame.K_RETURN]:
             current_game_state = GameState.PLAYING
 
-    elif current_game_state == GameState.PLAYING:
+    elif current_game_state == GameState.PLAYING:        
         for event in events:
             # events for moving tank
             if event.type == pygame.MOUSEBUTTONDOWN:
