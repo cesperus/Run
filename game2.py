@@ -90,8 +90,7 @@ while run:
                 scurry_sound.play()
 
     keys = pygame.key.get_pressed()
-    my_player.move(keys[pygame.K_w] * -my_player.velocity, keys[pygame.K_a] * -my_player.velocity)
-    my_player.move(keys[pygame.K_s] * my_player.velocity, keys[pygame.K_d] * my_player.velocity)
+    my_player.move(keys[pygame.K_w], keys[pygame.K_s], keys[pygame.K_d], keys[pygame.K_a])
 
     player_group.update(keys)
     player_group.draw(screen)

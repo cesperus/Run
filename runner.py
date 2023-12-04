@@ -10,9 +10,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (40, 320)
         self.velocity = 1.5
 
-    def move(self, where, far):
-        self.rect.y += where
-        self.rect.x += far
+    def move(self, up, down, right, left):
+        self.rect.y -= up
+        self.rect.y += down
+        self.rect.x += right
+        self.rect.x -= left
         # Keep the player within the screen bounds
         self.rect.y = max(0, min(self.rect.y, 640 - self.rect.height))
         self.rect.x = max(0, min(self.rect.x, 1088 - self.rect.width))
