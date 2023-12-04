@@ -17,6 +17,7 @@ scurry_sound = pygame.mixer.Sound('assets/audios/scurry.wav')
 scurry_sound.set_volume(.4)
 tank_sound = pygame.mixer.Sound('assets/audios/tank.wav')
 tank_sound.set_volume(.4)
+dead = pygame.mixer.Sound('assets/audios/death.mp3')
 
 
 # set screen size
@@ -139,9 +140,10 @@ while run:
 
         # Check for bullet collisions with player
         for player in player_group:
-            hits = pygame.sprite.spritecollide(player, bullet_group, True)
-            if hits:
+            hit = pygame.sprite.spritecollide(player, bullet_group, True)
+            if hit:
                 current_game_state = GameState.GAME_OVER
+                dead.play()
 
         # Check if player reaches the winning x position
         if my_player.rect.x >= FINISH_LINE:
