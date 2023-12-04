@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect()
         self.rect.center = (40, 320)
-        self.velocity = 1.5
+        self.velocity = 10
 
     def move(self, up, down, right, left):
         self.rect.y -= up

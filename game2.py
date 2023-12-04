@@ -34,6 +34,9 @@ class GameState:
     GAME_OVER = 2
     WINNER = 3
 
+# where the player needs to get (w/o being shot) in order to win
+FINISH_LINE = 910
+
 # Initialize game state
 current_game_state = GameState.MENU
 
@@ -57,7 +60,7 @@ player_group.add(my_player)
 bullet_group = pygame.sprite.Group()
 
 # shooting cooldown to prevent spam & lag
-SHOOT_COOLDOWN = 400
+SHOOT_COOLDOWN = 600
 lastshot = 0
 
 
@@ -77,7 +80,7 @@ while run:
     if current_game_state == GameState.MENU:
         # Display menu elements - used Chat GPT for next 5 lines
         header_text = font.render("No Man's Land", True, (128, 0, 0))
-        start_button_text = font.render("Start Game (press Return)", True, (10, 10, 10))
+        start_button_text = font.render("Start Game (Return)", True, (10, 10, 10))
 
         # Draw header and start button on the screen
         screen.blit(header_text, (WIDTH // 2 - header_text.get_width() // 2, 100))
@@ -133,6 +136,41 @@ while run:
 
         bullet_group.update(player_group)
         bullet_group.draw(screen)
+
+        # Check for bullet collisions with player
+        for player in player_group:
+            hits = pygame.sprite.spritecollide(player, bullet_group, True)
+            if hits:
+                current_game_state = GameState.GAME_OVER
+
+        # Check if player reaches the winning x position
+        if my_player.rect.x >= FINISH_LINE:
+            current_game_state = GameState.WINNER
+
+    elif current_game_state == GameState.GAME_OVER:
+        # Display game over elements
+        game_over_text = font.render("Game Over", True, (255, 0, 0))
+        restart_txt = font.render("Restart (Space)", True, (10, 10, 10))
+        screen.blit(game_over_text, (WIDTH // 2 - game_over_text.get_width() // 2, 300))
+
+        if keys[pygame.K_SPACE]:
+            # Reset game state
+            current_game_state = GameState.MENU
+
+            # Reset player position
+            my_player.rect.x = 0
+            my_player.rect.y = 320
+
+            # Reset turret position
+            my_turret.rect.center = (1056, 320)
+
+            # Clear bullets
+            bullet_group.empty()
+
+    elif current_game_state == GameState.WINNER:
+        # Display winner elements
+        winner_text = font.render("You Win!", True, (0, 255, 0))
+        screen.blit(winner_text, (WIDTH // 2 - winner_text.get_width() // 2, 300))
 
     pygame.display.flip()
 
