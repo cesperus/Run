@@ -9,10 +9,9 @@ class Turret(pygame.sprite.Sprite):
         self.image = pygame.transform.scale_by(self.image, .6)
         self.rect = self.image.get_rect()
         self.rect.center = (1056, 320)
-        self.scroll_direction = 0
 
-    def move(self, where):
-        self.rect.y += where
+    def move(self, direction):
+        self.rect.y += direction
         # Keep the object within the screen bounds
         self.rect.y = max(0, min(self.rect.y, 590))
 
