@@ -36,7 +36,7 @@ class GameState:
     WINNER = 3
 
 # where the player needs to get (w/o being shot) in order to win
-FINISH_LINE = 910
+FINISH_LINE = 926
 
 # Initialize game state
 current_game_state = GameState.MENU
@@ -61,7 +61,7 @@ player_group.add(my_player)
 bullet_group = pygame.sprite.Group()
 
 # shooting cooldown to prevent spam & lag
-SHOOT_COOLDOWN = 600
+SHOOT_COOLDOWN = 540
 lastshot = 0
 
 
