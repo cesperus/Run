@@ -74,7 +74,6 @@ while run:
                     # Play the shooting sound
                     shooting_sound.play()
 
-
         # events for moving player
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
@@ -90,8 +89,10 @@ while run:
                 my_player.rect.x += my_player.velocity  # Move right
                 scurry_sound.play()
 
-
     keys = pygame.key.get_pressed()
+    my_player.move(keys[pygame.K_w] * -my_player.velocity, keys[pygame.K_a] * -my_player.velocity)
+    my_player.move(keys[pygame.K_s] * my_player.velocity, keys[pygame.K_d] * my_player.velocity)
+
     player_group.update(keys)
     player_group.draw(screen)
 
