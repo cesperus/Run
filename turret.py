@@ -5,17 +5,19 @@ import math
 class Turret(pygame.sprite.Sprite):
     def __init__(self,screen):
         super().__init__()
-        #self.image = pygame.Surface((150,50))
-        #self.image.fill((0,0,220))
         self.image = pygame.transform.rotate(pygame.image.load('assets/images/players and turret stuff/tankBeige_outline.png'),0)
         self.image = pygame.transform.scale_by(self.image, .6)
         self.rect = self.image.get_rect()
         self.rect.center = (1056, 200)
-        self.scroll_direction = 0  # 1 for scrolling up, -1 for scrolling down
+        self.scroll_direction = 0
+
+    def move(self, delta_y):
+        self.rect.y += delta_y
+        # Keep the object within the screen bounds
+        self.rect.y = max(0, min(self.rect.y, 590))
 
     def update(self):
-        self.rect.y += self.scroll_direction * 5  # Adjust the speed as needed
-        self.rect.y = max(0, min(self.rect.y, 350))  # Keep the object within the screen bounds
+        pass
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
