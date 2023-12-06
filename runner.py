@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += down
         self.rect.x += right
         self.rect.x -= left
-        # Keep the player within the screen bounds
+        # keep the player within the screen bounds
         self.rect.y = max(0, min(self.rect.y, 640 - self.rect.height))
         self.rect.x = max(0, min(self.rect.x, 1088 - self.rect.width))
 

@@ -33,6 +33,6 @@ class Bullet(pygame.sprite.Sprite):
         # bullet first left
         self.rect.x -= self.velocity
 
-        # Remove the bullet when it goes off the screen
+        # remove the bullet when it goes off the screen
         if self.rect.right < 0:
             self.kill()
