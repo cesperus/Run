@@ -1,5 +1,4 @@
 import pygame
-import random
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen):
@@ -11,6 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 10
 
     def move(self, up, down, right, left):
+        '''updates player position based on inputs'''
         self.rect.y -= up
         self.rect.y += down
         self.rect.x += right
@@ -21,4 +21,5 @@ class Player(pygame.sprite.Sprite):
 
 
 def draw(self, screen):
-        screen.blit(self.image, self.rect)
+    '''draws player on screen'''
+    screen.blit(self.image, self.rect)
